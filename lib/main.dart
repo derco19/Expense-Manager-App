@@ -19,10 +19,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
         accentColor: Colors.amber,
-        fontFamily: 'Quicksand',
         textTheme: ThemeData.light().textTheme.copyWith(
-            // ignore: deprecated_member_use
-            title: TextStyle(
+            //ignore: deprecated_member_use
+            headline1: TextStyle(
+              fontFamily: 'OpenSans',
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+              fontSize: 24,
+            ),
+            subtitle1: TextStyle(
               fontFamily: 'OpenSans',
               fontWeight: FontWeight.bold,
               fontSize: 18,
@@ -32,8 +37,8 @@ class MyApp extends StatelessWidget {
           textTheme: ThemeData.light().textTheme.copyWith(
             // ignore: deprecated_member_use
             title: TextStyle(
-              fontFamily: 'OpenSans',
               fontSize: 22,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
@@ -78,17 +83,23 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  void _addNewTransaction(String txTitle,double txAmount)
+  void _addNewTransaction(String txTitle,double txAmount,DateTime chosenDate)
   {
     final newTx = Transaction(
       title: txTitle,
       amount: txAmount,
-      date: DateTime.now(),
+      date:chosenDate,
       id: DateTime.now().toString(),
     );
 
     setState(() {
       _userTransaction.add(newTx);
+    });
+  }
+
+  void _deleteTransaction(String id) {
+    setState(() {
+      _userTransaction.removeWhere((tx) => tx.id==id);
     });
   }
 
@@ -113,9 +124,9 @@ class _MyHomePageState extends State<MyHomePage> {
           appBar: AppBar(
             title: Text(
                 'Personal Expenses',
-              style: TextStyle(
-              fontFamily: 'OpenSans',
-              ),
+//              style: TextStyle(
+//              //fontFamily: 'OpenSans',
+//              ),
             ),
             actions: <Widget>[
               IconButton(
@@ -129,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Chart(_recentTransaction),
-                TransactionList(_userTransaction),
+                TransactionList(_userTransaction,_deleteTransaction),
               ],
             ),
           ),
